@@ -213,7 +213,7 @@ func (srv *Server) addPeer(p *Peer) bool {
 	srv.log.Info("server addPeer, len(peers)=%d", srv.PeerCount())
 	peer := srv.peerSet.find(p.Node.ID)
 	if peer != nil {
-		srv.log.Debug("peer is already exist, skip")
+		srv.log.Debug("peer is already exist(%s -> %s), skip", peer.RemoteAddr(), peer.LocalAddr())
 		return false
 	}
 
@@ -316,7 +316,7 @@ func (srv *Server) listenLoop() {
 			break
 		}
 		go func() {
-			srv.log.Info("Accept new connection from, %s -> %s", fd.LocalAddr(), fd.RemoteAddr())
+			srv.log.Info("Accept new connection from, %s -> %s", fd.RemoteAddr(), fd.LocalAddr())
 			err := srv.setupConn(fd, inboundConn, nil)
 			if err != nil {
 				srv.log.Info("setupConn err, %s", err)
